@@ -1,0 +1,2 @@
+# Small Scripts/Automator
+Currently the only Automator workflow here is an implementation of the script "zip_safe.sh" in [Small-scripts/Bash](../Bash). The workflow/script creates a .zip without the infamous .DS_Store files from macOS that become visible in Windows. It also leaves out .svn and .git directories, in case those are present.
