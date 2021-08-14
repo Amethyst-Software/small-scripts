@@ -17,9 +17,13 @@ if [ ! "$#" -eq 2 ]; then
    exit
 fi
 
-# Get ID for RSS feed from page's HTML, if RSS is enabled
+# Get ID for RSS feed from page's HTML, if RSS is enabled; if not, quit
 RSS_ID=$(curl --silent --insecure --user-agent '"$AGENT"' "$GALLERY_PAGE" | grep --max-count=1 -o "&Data=[_0-9A-Za-z]*")
 RSS_ID=${RSS_ID#&Data=}
+if [ -z "$RSS_ID" ]; then
+   echo "The RSS feed appears to be disabled for this gallery, so it cannot be downlaoded."
+   exit
+fi
 
 # Construct RSS feed link by appending RSS path to gallery's domain
 DOMAIN=$(echo $GALLERY_PAGE | grep -E -o "^http[s]?://([^/]+)/")
