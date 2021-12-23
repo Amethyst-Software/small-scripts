@@ -21,7 +21,7 @@ fi
 RSS_ID=$(curl --silent --insecure --user-agent '"$AGENT"' "$GALLERY_PAGE" | grep --max-count=1 -o "&Data=[_0-9A-Za-z]*")
 RSS_ID=${RSS_ID#&Data=}
 if [ -z "$RSS_ID" ]; then
-   echo "The RSS feed appears to be disabled for this gallery, so it cannot be downlaoded."
+   echo "The RSS feed appears to be disabled for this gallery, so it cannot be downloaded."
    exit
 fi
 
