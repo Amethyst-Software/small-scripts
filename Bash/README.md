@@ -62,6 +62,17 @@ Saves all email addresses found in a folder's text files or Apple Mail emails (.
 <!--The directory to recursively collect suffixes from.-->
 Prints out a list of all suffixes used by the files in a directory. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/collect_file_suffixes.jpg)
 
+### [Compare File Names in Directories](compare_file_names_in_directories.sh)
+<!--The first directory to look at.
+The second directory to look at.
+(optional) The argument "--no-suffix" to ignore file name suffixes during comparison.-->
+Compares the names of the files in two directories and outputs which names are unique to each side.
+
+### [Compare Directory to List](compare_directory_to_list.sh)
+<!--The directory in which to search for files.
+The text file with file names to search for.-->
+Compares the names of the items in a directory to the file names listed in a text file, and outputs which names are unique to each side.
+
 ### [Count Files by Name](count_files_by_name.sh)
 <!--The directory in which to recursively search.
 The suffixes to search for.-->
@@ -100,11 +111,6 @@ Prints out directory items which would have a name conflict in a case-insensitiv
 <!--The text file with a set of search terms.
 The text file to search.-->
 Prints out matching lines between file A and file B.
-
-### [Find File Name in File](find_file_name_in_file.sh)
-<!--The directory in which to recursively search files.
-The text file with file names to search for.-->
-Looks for items in a directory whose names are *not* listed in a given text file.
 
 ### [Find List in Files](find_list_in_files.sh)
 <!--The directory in which to recursively search files.
