@@ -249,7 +249,7 @@ The date of the desired history in the format 'yyyy-m-d'.
 (optional) The time zone offset.-->
 Tells you all the sites you visited in a Chromium-based browser on a given day. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/print_chromium_history.jpg)
 
-### [Scrape Smugmug Images](scrape_smugmug_images.sh)
+### [Scrape Smugmug Gallery](scrape_smugmug_gallery.sh)
 <!--The URL of a Smugmug gallery.
-The directory in which to save the images.-->
-Saves all images from a Smugmug album.
+The directory in which to save the media.-->
+Saves all images and movies from a Smugmug album.
