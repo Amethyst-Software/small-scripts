@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Scrape Smugmug Images
+# Scrape Smugmug Gallery
 # Parameter 1: URL of a Smugmug gallery
-# Parameter 2: Output directory for images
+# Parameter 2: Output directory for media
 # Recommended width:
 # |-----------------------------------------------------------------------------------------------------------------------|
 
@@ -13,7 +13,7 @@ AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML
 
 # Safety check
 if [ ! "$#" -eq 2 ]; then
-   echo "You must pass this script two arguments: (1) the URL of the gallery and (2) the local path to save its images to."
+   echo "You must pass this script two arguments: (1) the URL of the gallery and (2) the local path in which to save its images/video."
    exit
 fi
 
@@ -50,4 +50,26 @@ for SUFFIX in jpg gif; do
          echo "Download failed with code $CURL_ERR."
       fi
    done
+done
+
+# Load gallery page again and guess full-size video URLs from those provided
+for MOVIE in `curl --silent --insecure --user-agent '"$AGENT"' "$RSS_FEED" | grep -o "<id>https:.*\.mp4"`; do
+   MOVIE_URL=${MOVIE#<id>}
+
+   # Two assumptions here: that 1280p is available and that 640p is what's listed (but the 640p will not download)
+   HD_URL=$(echo "$MOVIE_URL" | sed "s/-640\.mp4/-1280.mp4/")
+   HD_URL=$(echo "$HD_URL" | sed "s:/640/:/1280/:")
+
+   # Replace custom domain or subdomain with canonical location of actual files
+   LESS_DOMAIN=${HD_URL#*.com/}
+   SWAP_DOMAIN=https://photos.smugmug.com/${LESS_DOMAIN}
+
+   JUST_NAME=${HD_URL##*/}
+   echo "Downloading $JUST_NAME..."
+
+   curl -o "$OUTPUT_DIR/$JUST_NAME" --silent --insecure --user-agent '"$AGENT"' "$SWAP_DOMAIN"
+   CURL_ERR=$(echo $?)
+   if [ $CURL_ERR != 0 ]; then
+      echo "Download failed with code $CURL_ERR."
+   fi
 done
