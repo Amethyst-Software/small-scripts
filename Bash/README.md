@@ -89,7 +89,13 @@ The text file with the list of names to use for the copies.
 The directory in which to make these copies.-->
 Given base file X and text file Y, makes one copy of X named for each line in Y in a given directory.
 
-### [Duplicate and Name](duplicate_and_name.sh)
+### [Delete Files in List](delete_files_in_list.sh)
+<!--The directory in which to recursively search files.
+The regex pattern of file names to search.
+The text file with the terms to search for in these files.-->
+Searches a directory for files containing any of the terms in a given text file, and moves matching files to the Trash.
+
+### [Duplicate File and Copy Names](duplicate_file_and_copy_names.sh)
 <!--The path to the file to copy 'n' times.
 The directory of files with the names to use for the copies.
 The directory in which to make these copies.-->
@@ -107,7 +113,7 @@ Replaces the specified terms in a file with new terms, saving the result in a ne
 <!--(none)-->
 Prints out directory items which would have a name conflict in a case-insensitive file system.
 
-### [Find File A in File B](find_file_a_in_file_b.sh)
+### [Find Line Matches](find_line_matches.sh)
 <!--The text file with a set of search terms.
 The text file to search.-->
 Prints out matching lines between file A and file B.
@@ -117,12 +123,6 @@ Prints out matching lines between file A and file B.
 The regex pattern of file names to search.
 The text file with the terms to search for in these files.-->
 Searches a directory for files containing any of the terms in a given text file.
-
-### [Find List in Files and Delete](find_list_in_files_and_delete.sh)
-<!--The directory in which to recursively search files.
-The regex pattern of file names to search.
-The text file with the terms to search for in these files.-->
-Searches a directory for files containing any of the terms in a given text file, and moves matching files to the Trash.
 
 ### [Find Zero-Byte Files](find_zero_byte_files.sh)
 <!--(none)-->
@@ -227,21 +227,26 @@ Looks for working copies of scripts that are newer than the copies under version
 <!--(none)-->
 Prevents your local disk's paths from showing up in an Xcode-built binary.
 
-### [Find Header Comments](find_header_comments.sh)
-<!--The directory in which to recursively search source files.-->
-Isolates and prints the comment block from the top of each source file in a project. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/find_header_comments.png)
-
 ### [Print Certificate Info](print_cert_info.sh)
 <!--The directory in which to recursively search for applications.-->
 Tells you the developer certificate signing authority for each app in a folder. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/print_cert_info.jpg)
 
+### [Print Header Comments](print_header_comments.sh)
+<!--The directory in which to recursively search source files.-->
+Isolates and prints the comment block from the top of each source file in a project. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/print_header_comments.png)
+
 ---
 
 ## Web
+### [Download URLs in List](download_urls_in_list.sh)
+<!--The path to the file with the list of URLs.
+The folder into which to download the files.-->
+Given a text file that has a list of URLs pointing to files, newline-separated, download the linked files into a given directory.
+
 ### [HTTP Tests](http_tests.sh)
-<!--The type of response to obtain (run without parameters to see choices).
+<!--The type of response to obtain (run without parameters to see arguments).
 The URL to test.-->
-Prints the response (status code, header, redirect URL, or Internet Archive status code) received upon querying a given URL. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/http_tests.jpg)
+Prints the desired type of response (status code, HTTP header, redirect URL, or Internet Archive status code) received upon querying a given URL. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/http_tests.jpg)
 
 ### [Print Chromium History](print_chromium_history.sh)
 <!--The name of the browser or the path to the browser's history file.
