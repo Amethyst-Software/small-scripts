@@ -1,12 +1,17 @@
 #!/bin/bash
 
 # Total Sound Times
-# Sums the times of the AIFFs in a folder (parameter 1). Requires ffmpeg.
+# Sums the times of the audio files in a given folder (parameter 1) which have the suffix given in parameter 2.
+# The suffix you supply is not case-sensitive. Requires ffmpeg.
+# Recommended width:
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---|
 
 IFS="
 "
 
 IN_DIR="$1"
+SUFFIX="$2"
+SUFFIX_UPPER=$(echo "$SUFFIX" | tr "[:lower:]" "[:upper:]")
 TOTAL_TIME=0
 COUNT=0
 
@@ -16,9 +21,10 @@ if [ "$?" -ne 0 ]; then
    exit
 fi
 
-echo "Totaling the time of this folder's AIFFs..."
-for AIF in `find $IN_DIR | grep .aif$ `; do
-   FILENAME=$(basename "$AIF")
+
+echo "Totaling the time of this folder's ${SUFFIX_UPPER}s..."
+for SOUND in `find $IN_DIR -iname "*.$2"`; do
+   FILENAME=$(basename "$SOUND")
 
    # Ask ffprobe to print to variable just the duration of the file
    FILE_TIME=$(ffprobe -i "$IN_DIR/$FILENAME" -show_entries format=duration -v quiet -of csv="p=0")
