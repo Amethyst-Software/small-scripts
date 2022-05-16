@@ -1,18 +1,16 @@
 #!/bin/bash
 
-# Find List in Files and Delete
-# A program that looks in the directory given in parameter 1 for files with names matching the
-# regex pattern given in parameter 2, and moves them to the Trash if their content matches any of
-# the terms in a list given in parameter 3.
+# Delete Files in List
+# Looks in a directory at all files with names matching the given regex pattern and moves them to
+# the Trash if their content matches any of the terms in a text file given in parameter 3.
 # Recommended width:
-# |---------------------------------------------------------------------------------------------|
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---|
 
-# Set the field separator to a newline to avoid spaces in paths breaking our variable-setting
 IFS="
 "
 
 SEARCH_DIR=$1
-SEARCH_FILES=$2
+SEARCH_FILES=$2 # regex; the pattern "\.[ch]$" would search all files ending in ".c" or ".h"
 TERM_LIST=$3
 FOUND=0
 THE_TIME=$(date "+%Y-%m-%d--%H-%M-%S")

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Find File A in File B
+# Find Line Matches
 # Search the text file given as parameter 2 for each line in the text
 # file given in parameter 1, and print out the matches.
 

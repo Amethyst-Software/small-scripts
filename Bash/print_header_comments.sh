@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Find Header Comments
+# Print Header Comments
 # Prints the header comments that developers typically place at the tops of
 # source files. Works recursively starting from the given directory.
 # Intended for use in C family code. The heuristics below were hastily
