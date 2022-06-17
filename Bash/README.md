@@ -213,7 +213,8 @@ Resizes all images, or only the images of a certain size, if desired. Requires I
 
 ## Audio File Management
 ### [Total Sound Times](total_sound_times.sh)
-<!--The directory of sound files to examine.-->
+<!--The directory of sound files to examine.
+The suffix of the files which should be totalled.-->
 Gives the cumulative total time of all AIFFs in a folder. Requires 'ffmpeg' to be installed. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/total_sound_times.jpg)
 
 ---

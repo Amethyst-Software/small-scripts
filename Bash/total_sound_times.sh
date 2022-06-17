@@ -15,6 +15,16 @@ SUFFIX_UPPER=$(echo "$SUFFIX" | tr "[:lower:]" "[:upper:]")
 TOTAL_TIME=0
 COUNT=0
 
+if [ "$#" -ne 2 ]; then
+   echo "Error: You must supply two parameters: the directory in which to look and the suffix of audio file to look at (without the leading period)."
+   exit
+fi
+
+if [ ! -d "$IN_DIR" ]; then
+   echo "Error: Directory '$IN_DIR' does not exist."
+   exit
+fi
+
 which ffprobe > /dev/null
 if [ "$?" -ne 0 ]; then
    echo "Error: 'ffprobe' (part of the ffmpeg suite) does not appear to be installed, so the operation cannot be performed." | fmt -w 80
