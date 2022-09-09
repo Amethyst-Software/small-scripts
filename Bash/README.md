@@ -8,8 +8,6 @@ Feel free to file an issue if a script is not working for you. Although I origin
 
 [General Files](#general-file-management)
 
-[Image Files](#image-file-management)
-
 [Audio Files](#audio-file-management)
 
 [Development](#development)
@@ -190,40 +188,6 @@ Creates Windows-friendly ZIPs that lack the Mac's invisible .DS_Store files, als
 
 ---
 
-## Image File Management
-### [Convert Images](convert_images.sh)
-<!--(none)-->
-Converts all images of a given suffix to another format. Requires ImageMagick.
-
-### [Create HTML Gallery](create_html_gallery.sh)
-<!--The top directory of the folders full of images.-->
-Creates an HTML directory listing of all subfolders, and an HTML gallery of all images in each subfolder. Requires ImageMagick.
-
-### [Crop Images](crop_images.sh)
-<!--The directory of images to create cropped copies of.
-The width to crop them to.
-The height to crop them to.
-The left inset.
-The top inset.-->
-Crops a folder of images using a certain offset and size. Requires ImageMagick.
-
-### [Find Images by Size](find_images_by_size.sh)
-<!--The directory to search recursively for images.
-The minimum desired width of results.
-The word 'and' or 'or' (whether only the min. width or min. height needs to be met, or both).
-The minimum desired height of results.
-(optional) The word 'port' or 'land' for only portrait or only landscape results.-->
-Prints out names of files that meet a minimum specified width/height and optional portrait/landscape orientation. Requires ImageMagick.
-
-### [Resize Images](resize_images.sh)
-<!--'--source' followed by the directory with the images to be resized.
-(choose one) '--overwrite', '--beside', or '--dest PATH': Whether to overwrite the original images, place the resized copies beside them, or place the resized copies in PATH.
-'--new-percent:NUM', or '--new-width:NUM' and/or '--new-height:NUM': The new size for the images.
-'--old-[width|height]-[eq|lt|le|gt|ge]:NUM': Only resize images matching this criterion. An example would be '--old-width-gt:10000', which would resize images above 10K pixels in width. You can only use one '--old-width-*' argument at a time, but you can use one '--old-width-*" argument and one '--old-height-*' argument together.-->
-Resizes all images, or only the images of a certain size, if desired. Requires ImageMagick.
-
----
-
 ## Audio File Management
 ### [Total Sound Times](total_sound_times.sh)
 <!--The directory of sound files to examine.
@@ -252,6 +216,10 @@ Isolates and prints the comment block from the top of each source file in a proj
 ---
 
 ## Web
+### [Create HTML Gallery](create_html_gallery.sh)
+<!--The top directory of the folders full of images.-->
+Creates an HTML directory listing of all subfolders, and an HTML gallery of all images in each subfolder. Requires ImageMagick.
+
 ### [Download URLs in List](download_urls_in_list.sh)
 <!--The path to the file with the list of URLs.
 The folder into which to download the files.-->
