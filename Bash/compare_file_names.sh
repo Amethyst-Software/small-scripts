@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Compare File Names in Directories
+# Compare File Names
 # Looks in the directories specified in parameters 1 and 2 and notes
 # which files are only in one place. Pass "--no-suffix" as the third
 # argument if you want to compare files without their suffixes (e.g.
