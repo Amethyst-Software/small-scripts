@@ -10,7 +10,7 @@
 #    "source": Full page source
 # Parameter 2: The URL to test.
 # Recommended width:
-# |--------------------------------------------------------------------------------------------------------------------------|
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----|
 
 IFS="
 "
@@ -20,20 +20,21 @@ if [ "$#" -ne 2 ]; then
    exit 1
 fi
 
-AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36 OPR/67.0.3575.53"
+AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36"
+OPT=$1
 URL=$2
 
-if [ "$1" == "response" ]; then
+if [ "$OPT" == "response" ]; then
    curl -o /dev/null --silent --insecure --compressed --head --user-agent '$AGENT' --write-out '%{http_code}\n' $URL
-elif [ "$1" == "header" ]; then
+elif [ "$OPT" == "header" ]; then
    curl --silent --insecure --compressed --head --user-agent '$AGENT' $URL
-elif [ "$1" == "redirect" ]; then
+elif [ "$OPT" == "redirect" ]; then
    curl -o /dev/null --silent --insecure --compressed --head --user-agent '$AGENT' --max-time 10 --write-out '%{redirect_url}\n' $URL
-elif [ "$1" == "archive" ]; then
+elif [ "$OPT" == "archive" ]; then
    curl --silent --max-time 10 "http://archive.org/wayback/available?url=$URL&statuscodes=200&statuscodes=203&statuscodes=206"
    echo
-elif [ "$1" == "source" ]; then
+elif [ "$OPT" == "source" ]; then
    curl --silent --insecure --user-agent '$AGENT' $URL
 else
-   echo "Invalid mode argument '$1'. Aborting."
+   echo "Invalid mode argument '$OPT'. Aborting."
 fi
