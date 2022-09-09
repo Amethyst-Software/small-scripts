@@ -14,9 +14,9 @@ SEARCH_NAMES=$2 # regex; the pattern "\.[ch]$" would search all files ending in 
 TERM_LIST=$3
 
 # Read a term from the list
-for TERM in `cat "$TERM_LIST.txt"`; do
+for TERM in `cat "$TERM_LIST"`; do
    # Search for files matching name pattern
    for FILE in `find "$SEARCH_LOC" | grep "$SEARCH_NAMES"`; do
-      cat "$FILE" | grep "$TERM" >> "$TERM_LIST results.txt"
+      cat "$FILE" | grep "$TERM" >> "${TERM_LIST%.*} results.txt"
    done
 done
