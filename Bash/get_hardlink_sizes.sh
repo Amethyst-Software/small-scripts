@@ -4,10 +4,12 @@
 # Finds all hardlinked files on a volume or in a specified directory and prints out how
 # much space the files take up and how much space is saved through the use of hardlinks.
 # Note that the saving calculation can only take into account how many hardlinks were
-# found to the same inode within the directory you supply; if the parent directory
-# contains more hardlinks to the same inode, then the savings figure will be higher when
-# the script is run on that directory.
-# Parameters:
+# sharing the same inode within the directory you supply; if the parent directory contains
+# more hardlinks sharing the same inode, then the savings figure will be higher when the
+# script is run on that higher directory.
+# Parameters: Read help message below.
+# Recommended width:
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---|
 
 IFS="
 "
@@ -36,34 +38,36 @@ if [ ! -d "$THE_PATH" ]; then
    exit
 fi
 
-# Print supplied raw number of bytes at a human-readable scale
+# Print a raw number of bytes at a human-readable scale
 function printHumanReadable()
 {
+   if [ -z "$1" ]; then
+      echo "Did not receive a number as an argument!"
+      exit
+   fi
+
    BIG_NUM=$1
-   SIZE_UNIT=""
    SCALE=0
-   NUM_DEC=0
 
    while [ $(echo $BIG_NUM'>'1000 | bc -l) -eq 1 ]; do
       BIG_NUM=$(echo | awk -v size_bytes=$BIG_NUM '{printf "%f",size_bytes/=1000}')
       let SCALE+=1
    done
 
-   if [ $SCALE == 0 ]; then
-      SIZE_UNIT="bytes"
-   elif [ $SCALE == 1 ]; then
-      SIZE_UNIT="KB"
-   elif [ $SCALE == 2 ]; then
-      SIZE_UNIT="MB"
-      NUM_DEC=1
-   elif [ $SCALE == 3 ]; then
-      SIZE_UNIT="GB"
-      NUM_DEC=2
+   # Print with precision that matches Finder's Size column
+   if [ $SCALE -eq 0 ]; then
+      printf "%d bytes" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 1 ]; then
+      printf "%d KB" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 2 ]; then
+      printf "%.1f MB" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 3 ]; then
+      printf "%.2f GB" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 4 ]; then
+      printf "%.2f TB" $BIG_NUM $SIZE_UNIT
    else
-      SIZE_UNIT="(out of scope!)"
+      echo "Number $1 is out of scope!"
    fi
-
-   printf "%0.*f $SIZE_UNIT" $NUM_DEC $BIG_NUM
 }
 
 # Print findings at end of script
