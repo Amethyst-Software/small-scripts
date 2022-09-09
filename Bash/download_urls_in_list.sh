@@ -21,5 +21,5 @@ fi
 for URL in `cat "$1"`; do
    FILE_NAME=${URL##*/}
    echo "Downloading $FILE_NAME..."
-   curl -o "$2/$FILE_NAME" --max-time 10 "$URL"
+   curl -L -o "$2/$FILE_NAME" --max-time 10 "$URL"
 done
