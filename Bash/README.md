@@ -81,7 +81,7 @@ Recursively searches for and counts the specified files in the given directory.
 ### [Count Lines by Name](count_lines_by_name.sh)
 <!--The directory in which to recursively search.
 The suffixes to search for.-->
-Recursively searches for specified files in the given directory and totals their lines.
+Recursively searches for specified files in the given directory and totals their line counts.
 
 ### [Create Files from List](create_files_from_list.sh)
 <!--The path to the file to copy 'n' times.
@@ -220,6 +220,10 @@ Gives the cumulative total time of all AIFFs in a folder. Requires 'ffmpeg' to b
 ---
 
 ## Development
+### [Check for Git Updates](check_for_git_updates.sh)
+<!--Path to working copy.-->
+Looks for new commits on the remote server which can be pulled into a working copy.
+
 ### [Check for Script Updates](check_for_script_updates.sh)
 <!--(none)-->
 Looks for working copies of scripts that are newer than the copies under version control. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/check_for_script_updates.jpg)
