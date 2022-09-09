@@ -62,7 +62,14 @@ Saves all email addresses found in a folder's text files or Apple Mail emails (.
 <!--The directory to recursively collect suffixes from.-->
 Prints out a list of all suffixes used by the files in a directory. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/collect_file_suffixes.jpg)
 
-### [Compare File Names in Directories](compare_file_names_in_directories.sh)
+### [Compare File Dates](compare_file_dates.sh)
+<!--'--dirpath1' and '--dirpath2' are used for directory comparison.
+'--listpath1' and '--listpath2' are used for file comparison.
+'--dirfilter' can be used to only look at files in the directories which match a naming pattern.
+The directories and/or files you pass in can be named using '--dirname1', '--dirname2', '--listname1' and '--listname2'.-->
+Compares two sets of files to make sure that all files in set 1 exist in set 2 and that no files differ in modification date. The compared sets can be either two directories or two plain-text files which list individual files.
+
+### [Compare File Names](compare_file_names.sh)
 <!--The first directory to look at.
 The second directory to look at.
 (optional) The argument "--no-suffix" to ignore file name suffixes during comparison.-->
@@ -229,10 +236,6 @@ Gives the cumulative total time of all AIFFs in a folder. Requires 'ffmpeg' to b
 ### [Check for Git Updates](check_for_git_updates.sh)
 <!--Path to working copy.-->
 Looks for new commits on the remote server which can be pulled into a working copy.
-
-### [Check for Script Updates](check_for_script_updates.sh)
-<!--(none)-->
-Looks for working copies of scripts that are newer than the copies under version control. [(preview image)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/previews/check_for_script_updates.jpg)
 
 ### [Cloak Dev Paths](cloak_dev_paths.sh)
 <!--(none)-->
