@@ -32,16 +32,25 @@ fi
 
 # Get total file counts
 IFS=" "
+
 LS_OUTPUT=$(ls "$SEARCH_DIR" | wc -l)
 declare -a LS_OUTPUT_ARRAY=($LS_OUTPUT)
-TOTAL_DIR=${LS_OUTPUT_ARRAY[0]}
-CAT_OUTPUT=$(cat "$SEARCH_TXT" | wc -l)
-declare -a CAT_OUTPUT_ARRAY=($CAT_OUTPUT)
-TOTAL_TXT=${CAT_OUTPUT_ARRAY[0]}
+DIR_FILES=${LS_OUTPUT_ARRAY[0]}
+
+WC_OUTPUT=$(cat "$SEARCH_TXT" | wc -l)
+declare -a WC_OUTPUT_ARRAY=($WC_OUTPUT)
+TXT_FILES=${WC_OUTPUT_ARRAY[0]}
+
+# Correct line count if the file does not end in a newline
+LAST_CHAR=$(tail -c -1 "$SEARCH_TXT")
+if [ "$LAST_CHAR" != "\n" ]; then
+   let TXT_FILES+=1
+fi
+
 IFS="
 "
 
-# Compare directory and file
+# Compare directory to list
 for THE_FILE in `ls "$SEARCH_DIR"`; do
    RESULT=""
    RESULT=`grep "${THE_FILE%.*}" "$SEARCH_TXT"`
@@ -51,10 +60,11 @@ for THE_FILE in `ls "$SEARCH_DIR"`; do
    fi
 done
 
+# Compare list to directory
 for THE_LINE in `cat "$SEARCH_TXT"`; do
    RESULT=""
-   RESULT=`find "$SEARCH_DIR" -name "${THE_LINE}*" -type f`
-   if [[ "$RESULT" == find:* ]]; then
+   RESULT=`find "$SEARCH_DIR" -name "${THE_LINE%.*}*" -type f`
+   if [ -z "$RESULT" ]; then
       echo "${THE_LINE%.*} is in the list but does not exist as a file."
       let UNIQUE_TXT+=1
    fi
@@ -69,4 +79,4 @@ if [ $UNIQUE_TXT -eq 1 ]; then
    STR_FILE_NAMES="file name"
 fi
 
-echo "Found $UNIQUE_DIR $STR_FILES unique to the search directory (out of $TOTAL_DIR files) and $UNIQUE_TXT $STR_FILE_NAMES unique to the text file (out of $TOTAL_TXT names)."
+echo "Found $UNIQUE_DIR $STR_FILES unique to the search directory (out of $DIR_FILES files) and $UNIQUE_TXT $STR_FILE_NAMES unique to the text file (out of $TXT_FILES names)."
