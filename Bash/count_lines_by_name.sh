@@ -15,6 +15,13 @@ IFS="
 COUNT=0
 for FN in `find "$1" | grep "\.${2}$"`; do
    CUR=`cat "$FN" | wc -l`
+
+   # Correct line count if the file does not end in a newline
+   LAST_CHAR=$(tail -c -1 "$FN")
+   if [ "$LAST_CHAR" != "\n" ]; then
+      let CUR+=1
+   fi
+
    let COUNT+=$CUR
 done
 echo $COUNT
