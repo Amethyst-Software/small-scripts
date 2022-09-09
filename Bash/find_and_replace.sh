@@ -1,11 +1,11 @@
 #!/bin/bash
 
-IFS="
-"
-
 # Find and Replace
 # Look in the specified file for "in" terms 1 and 2, replacing them
 # with "out" terms 1 and 2. The results are output to a new file.
+
+IFS="
+"
 
 # Process arguments
 IN_FILE="$1"
@@ -27,9 +27,9 @@ IN_SIZE=${WC_OUTPUT_ARRAY[0]}
 IFS="
 "
 
-# Adjust line count if the file does not end in a newline
+# Correct line count if the file does not end in a newline
 LAST_CHAR=$(tail -c -1 "$IN_FILE")
-if [ "$LAST_CHAR" != "$IFS" ]; then
+if [ "$LAST_CHAR" != "\n" ]; then
    let IN_SIZE+=1
 fi
 
