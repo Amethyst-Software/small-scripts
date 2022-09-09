@@ -51,7 +51,7 @@
 # line of output).
 #
 # Recommended width:
-# |--------------------------------------------------------------------------------------|
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- -|
 
 IFS="
 "
@@ -61,6 +61,38 @@ if [ $# -ne 2 ]; then
    echo "You need to supply the arguments '--dir path/to/dir' for the directory to get the size of, or else '--file path/to/file' to specify a text file with a list of paths to get the sizes of. Read the comment at the top of this script to learn how to format the text file."
    exit
 fi
+
+# Print a raw number of bytes at a human-readable scale
+function printHumanReadable()
+{
+   if [ -z "$1" ]; then
+      echo "Did not receive a number as an argument!"
+      exit
+   fi
+
+   BIG_NUM=$1
+   SCALE=0
+
+   while [ $(echo $BIG_NUM'>'1000 | bc -l) -eq 1 ]; do
+      BIG_NUM=$(echo | awk -v size_bytes=$BIG_NUM '{printf "%f",size_bytes/=1000}')
+      let SCALE+=1
+   done
+
+   # Print with precision that matches Finder's Size column
+   if [ $SCALE -eq 0 ]; then
+      printf "%d bytes" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 1 ]; then
+      printf "%d KB" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 2 ]; then
+      printf "%.1f MB" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 3 ]; then
+      printf "%.2f GB" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 4 ]; then
+      printf "%.2f TB" $BIG_NUM $SIZE_UNIT
+   else
+      echo "Number $1 is out of scope!"
+   fi
+}
 
 # Load specified file into memory. If we got a path argument, construct fake input file
 # around the path.
@@ -90,53 +122,6 @@ else
    exit
 fi
 
-# Init global variables
-declare -a VOL_NAMES=() # parallel array with next four
-declare -a DATA_TYPES=()
-declare -a DIR_PATHS=()
-declare -a DATA_SIZES=()
-declare -a DEDUCT_IT=()
-NUM_PATHS=0
-
-# Print a raw number of bytes at a human-readable scale
-function printHumanReadable()
-{
-   if [ -z "$1" ]; then
-      echo "Did not receive a number as an argument!"
-      exit
-   fi
-
-   BIG_NUM=$1
-   SIZE_UNIT=""
-   SCALE=0
-   NUM_DEC=0
-
-   while [ $(echo $BIG_NUM'>'1000 | bc -l) -eq 1 ]; do
-      BIG_NUM=$(echo | awk -v size_bytes=$BIG_NUM '{printf "%f",size_bytes/=1000}')
-      let SCALE+=1
-   done
-
-   if [ $SCALE -eq 0 ]; then
-      SIZE_UNIT="bytes"
-   elif [ $SCALE -eq 1 ]; then
-      SIZE_UNIT="KB"
-   elif [ $SCALE -eq 2 ]; then
-      SIZE_UNIT="MB"
-      NUM_DEC=1
-   elif [ $SCALE -eq 3 ]; then
-      SIZE_UNIT="GB"
-      NUM_DEC=2
-   elif [ $SCALE -eq 4 ]; then
-      SIZE_UNIT="TB"
-      NUM_DEC=2
-   else
-      echo "Number $1 is out of scope!"
-      SIZE_UNIT="??"
-   fi
-
-   printf "%0.*f $SIZE_UNIT" $NUM_DEC $BIG_NUM
-}
-
 # Call 'sudo' if root access is not currently active on a timer from 'sudo' being used
 # recently (i.e., a previous invocation of this script). Otherwise the password prompt
 # appears the first time that "sudo du" is called below, which interferes with the
@@ -149,6 +134,12 @@ if [ $SUDO_NEEDED -eq 1 ]; then
 fi
 
 # Read input file into memory
+declare -a ITEM_VOL=() # parallel array with next four
+declare -a ITEM_TYPE=()
+declare -a ITEM_PATH=()
+declare -a ITEM_SIZE=()
+declare -a ITEM_NEG=()
+NUM_ITEMS=0
 CUR_VOL="-"
 CUR_TYPE="-"
 for THE_LINE in `echo "$INPUT_DATA"`; do
@@ -160,12 +151,20 @@ for THE_LINE in `echo "$INPUT_DATA"`; do
    # If this line is a volume name, read it in
    if [[ $THE_LINE =~ ^vol=[[:print:]]+$ ]]; then
       CUR_VOL=${THE_LINE##vol=}
+      if [ -z "$CUR_VOL" ]; then
+         echo "Error: Missing volume name after 'vol='."
+         exit
+      fi
       continue
    fi
 
    # If this line is a data type, read it in
    if [[ $THE_LINE =~ ^type=[[:print:]]+$ ]]; then
       CUR_TYPE=${THE_LINE##type=}
+      if [ -z "$CUR_TYPE" ]; then
+         echo "Error: Missing volume name after 'type='."
+         exit
+      fi
       continue
    fi
 
@@ -173,14 +172,18 @@ for THE_LINE in `echo "$INPUT_DATA"`; do
    # remove the '-' from the beginning
    if [[ $THE_LINE =~ ^- ]]; then
       THE_LINE=${THE_LINE#-}
-      DEDUCT_IT+=(1)
+      ITEM_NEG+=(1)
    else
-      DEDUCT_IT+=(0)
+      ITEM_NEG+=(0)
    fi
 
-   # Otherwise this must be a directory path, so read it in, invoking 'eval' in order to
-   # expand shortcuts like '~' or "$HOME", then make sure it exists
+   # Otherwise this must be a path item, so read it in, invoking 'eval' in order to expand
+   # shortcuts like '~' or "$HOME", then make sure it exists
    THE_PATH="$(eval echo "$THE_LINE")"
+   if [ -z "$THE_PATH" ]; then
+      echo "Error: Failed to read a path from the input file."
+      exit
+   fi
    FULL_PATH="/Volumes/$CUR_VOL$THE_PATH"
    if [ ! -d "$FULL_PATH" ]; then
       echo "Error: $THE_PATH does not exist on volume $CUR_VOL."
@@ -188,59 +191,78 @@ for THE_LINE in `echo "$INPUT_DATA"`; do
    fi
 
    # Store the path and its metadata (data sizes to be determined later)
-   DIR_PATHS+=($THE_PATH)
-   VOL_NAMES+=($CUR_VOL)
-   DATA_TYPES+=($CUR_TYPE)
-   DATA_SIZES+=(0)
-   let NUM_PATHS+=1
+   ITEM_PATH+=($THE_PATH)
+   ITEM_VOL+=($CUR_VOL)
+   ITEM_TYPE+=($CUR_TYPE)
+   ITEM_SIZE+=(0)
+   let NUM_ITEMS+=1
 done
 
-# Iterate over paths, filling in size metadata
+# Iterate over path items, filling in size metadata
 a=0
-echo -n "Getting sizes of directories ($a/$NUM_PATHS paths processed)..."
-while [ "x${DIR_PATHS[$a]}" != "x" ]; do
+echo -n "Getting sizes of directories ($a/$NUM_ITEMS paths processed)..."
+while [ "x${ITEM_PATH[$a]}" != "x" ]; do
    # If 'du' is being asked to get the size of /System, mask out the subdir "Volumes"
    # since this is a link in Catalina to the entire volume
-   FULL_PATH="/Volumes/${VOL_NAMES[$a]}${DIR_PATHS[$a]}"
+   FULL_PATH="/Volumes/${ITEM_VOL[$a]}${ITEM_PATH[$a]}"
    DU_CALL="sudo du -sc '$FULL_PATH' 2> /dev/null | tail -1 | cut -f 1"
-   if [ "${DIR_PATHS[$a]}" == "/System" ]; then
+   if [ ${ITEM_PATH[$a]} == "/System" ]; then
       DU_CALL="sudo du -sc -IVolumes '$FULL_PATH' 2> /dev/null | tail -1 | cut -f 1"
    fi
 
    # Ask 'du' for the size of the path
    let SIZE_SECTORS=$(eval $DU_CALL)
    let SIZE_BYTES=$SIZE_SECTORS*512
-   DATA_SIZES[$a]=$SIZE_BYTES
+   ITEM_SIZE[$a]=$SIZE_BYTES
 
    # Invert number if this is a "deduct" line
-   if [ ${DEDUCT_IT[$a]} -eq 1 ]; then
-      let DATA_SIZES[$a]*=-1
+   if [ ${ITEM_NEG[$a]} -eq 1 ]; then
+      let ITEM_SIZE[$a]*=-1
    fi
 
    # Update status
    let a+=1
    printf "\e[1A\n" # erase previous "processed..." message
    PATHS_STR="paths"
-   if [ $NUM_PATHS -eq 1 ]; then
+   if [ $NUM_ITEMS -eq 1 ]; then
       PATHS_STR="path"
    fi
-   echo -n "Getting sizes of directories ($a/$NUM_PATHS $PATHS_STR processed)..."
+   echo -n "Getting sizes of items in set ($a/$NUM_ITEMS $PATHS_STR processed)..."
 done
 
-# Print out list of sizes
-echo -ne "\n\n==Data sizes=="
-LAST_VOL="-"
+# Total items by type
+declare -a TYPE_NAME=()
+declare -a TYPE_SIZE=()
+declare -a TYPE_VOL=()
 LAST_TYPE="-"
-TYPE_TOTAL=0
+a=0
+b=0
+while [ "x${ITEM_PATH[$a]}" != "x" ]; do
+   if [ "${ITEM_TYPE[$a]}" == "$LAST_TYPE" ]; then
+      let TYPE_SIZE[$(($b-1))]+=${ITEM_SIZE[$a]}
+   else
+      TYPE_NAME+=(${ITEM_TYPE[$a]})
+      TYPE_SIZE+=(${ITEM_SIZE[$a]})
+      TYPE_VOL+=(${ITEM_VOL[$a]})
+      let b+=1
+      LAST_TYPE=${ITEM_TYPE[$a]}
+   fi
+
+   let a+=1
+done
+
+# Print out type sizes by volume
+echo;echo "==Data sizes=="
+LAST_VOL="-"
 DISK_TOTAL=0
 GRAND_TOTAL=0
 a=0
-while [ "x${DIR_PATHS[$a]}" != "x" ]; do
+while [ "x${TYPE_NAME[$a]}" != "x" ]; do
    # Print out info for volume if we're on a new volume now
-   if [ ${VOL_NAMES[$a]} != $LAST_VOL ]; then
+   if [ ${TYPE_VOL[$a]} != $LAST_VOL ]; then
       # Use IFS to split output from 'df' into an array
       IFS=" "
-      declare -a DF_LINE=(`df "/Volumes/${VOL_NAMES[$a]}" | tail -1`)
+      declare -a DF_LINE=(`df "/Volumes/${TYPE_VOL[$a]}" | tail -1`)
 
       # Get total space of this volume
       CAPAC_BLOCKS=${DF_LINE[1]}
@@ -251,7 +273,7 @@ while [ "x${DIR_PATHS[$a]}" != "x" ]; do
       USED_BLOCKS=${DF_LINE[2]}
       let USED_BYTES=$USED_BLOCKS*512
 
-      # Check if this is the boot volume; if so, then in Catalina we need to add two
+      # Check if this is the boot volume; if so, then in macOS 10.15+ we need to add two
       # other mount points' used figures to get the total used space on the disk
       DISK_NAME=${DF_LINE[0]}
       declare -a DF_ROOT_LINE=(`df / | tail -1`)
@@ -262,11 +284,13 @@ while [ "x${DIR_PATHS[$a]}" != "x" ]; do
             USED_BLOCKS=${DF_DATA_LINE[2]}
             let USED_BYTES+=$USED_BLOCKS*512
          fi
-         if [ -d /private/var/vm ]; then
-            declare -a DF_VM_LINE=(`df /private/var/vm | tail -1`)
-            USED_BLOCKS=${DF_VM_LINE[2]}
-            let USED_BYTES+=$USED_BLOCKS*512
-         fi
+         # As of macOS 12, this directory returns the same used space as /System/Volumes/
+         # Data/, incorrectly doubling the used space. Not sure when this change occurred.
+         #if [ -d /private/var/vm ]; then
+         #   declare -a DF_VM_LINE=(`df /private/var/vm | tail -1`)
+         #   USED_BLOCKS=${DF_VM_LINE[2]}
+         #   let USED_BYTES+=$USED_BLOCKS*512
+         #fi
       fi
 
       # Convert our total used bytes to something readable
@@ -274,50 +298,36 @@ while [ "x${DIR_PATHS[$a]}" != "x" ]; do
 
       # Print total line for last volume
       if [ $LAST_VOL != "-" ]; then
-         echo -ne "\nTotal: "
+         echo;echo -n "Total: "
          printHumanReadable $DISK_TOTAL
       fi
 
       # Print header line for this next volume
-      if [ $LAST_VOL != "-" ]; then
-         echo -ne "\n\n"
-      else
-         echo -ne "\n"
-      fi
-      echo -ne "Volume: ${VOL_NAMES[$a]} ($USED/$CAPAC used)"
+      echo "Volume: ${TYPE_VOL[$a]} ($USED/$CAPAC used)"
 
       # Reset stuff
-      LAST_VOL=${VOL_NAMES[$a]}
+      LAST_VOL=${TYPE_VOL[$a]}
       DISK_TOTAL=0
       IFS="
 "
    fi
 
-   # Print out total for data type if we're done with it, otherwise just add to the
-   # running total
-   if [ ${DATA_TYPES[$a]} != $LAST_TYPE ]; then
-      TYPE_TOTAL=${DATA_SIZES[$a]}
-      LAST_TYPE=${DATA_TYPES[$a]}
-      echo
-   else
-      TYPE_TOTAL=`echo $TYPE_TOTAL+${DATA_SIZES[$a]} | bc`
-   fi
+   # Print out total for data type
+   echo -n "${TYPE_NAME[$a]}: "
+   printHumanReadable ${TYPE_SIZE[$a]}
+   echo
 
-   DISK_TOTAL=`echo $DISK_TOTAL+${DATA_SIZES[$a]} | bc`
-   GRAND_TOTAL=`echo $GRAND_TOTAL+${DATA_SIZES[$a]} | bc`
-
-   printf "\e[1A\n" # erase previous total for this type
-   echo -n "$LAST_TYPE: "
-   printHumanReadable $TYPE_TOTAL
+   DISK_TOTAL=`echo $DISK_TOTAL+${TYPE_SIZE[$a]} | bc`
+   GRAND_TOTAL=`echo $GRAND_TOTAL+${TYPE_SIZE[$a]} | bc`
    
    let a+=1
 done
 
 # Print last volume's total since the "while" loop didn't get to do it
-echo -ne "\nTotal: "
+echo;echo -n "Disk total: "
 printHumanReadable $DISK_TOTAL
 
 # Print grand total for data set
-echo -ne "\n\nGrand total: "
+echo;echo;echo -n "Grand total: "
 printHumanReadable $GRAND_TOTAL
 echo
