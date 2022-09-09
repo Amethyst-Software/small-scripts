@@ -164,12 +164,18 @@ Given a folder of .emlx files, assigns each one a name based on the date and tim
 The suffix of the files to rename.-->
 Given a parent folder X, renames each file of a given suffix in X to be "X-#", where '#' is the alphabetical ordinal position of the file.
 
-### [Run on Files by Size](run_on_files_by_size.sh)
+### [Run Script on Files by Size](run_script_on_files_by_size.sh)
 <!--The script that will be run.
 The directory of files to appraise.
 The minimum size in bytes of files to pass to the script.
 The maximum size in bytes of files to pass to the script.-->
 Looking at the files in a given directory, pass each one to the specified script if the file is within a certain size range.
+
+### [Run Script with Args from File](run_script_with_args_from_file.sh)
+<!--'--script' followed by the path to the script to run.
+'--arglist' followed by the path to the list of arguments to pass to the script.
+(optional) '--echo' will print the assembled command before running it.-->
+Run a script with the arguments listed in a text file.
 
 ### [ZipSafe](zip_safe.sh)
 <!--The directory to compress (ZIP is placed next to directory).-->
