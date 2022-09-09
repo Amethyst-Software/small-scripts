@@ -2,8 +2,9 @@
 
 # Get Finder Sizes
 # Uses AppleScript to ask Finder the size of the file or folder that is passed in.
-# Will match what is shown in the Get Info window, except that the APFS+resource
-# fork bug is not present in these results.
+# Should match what is shown in the Get Info window.
+# Recommended width:
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----|
 
 # Print a raw number of bytes at a human-readable scale
 function printHumanReadable()
@@ -14,33 +15,27 @@ function printHumanReadable()
    fi
 
    BIG_NUM=$1
-   SIZE_UNIT=""
    SCALE=0
-   NUM_DEC=0
 
    while [ $(echo $BIG_NUM'>'1000 | bc -l) -eq 1 ]; do
       BIG_NUM=$(echo | awk -v size_bytes=$BIG_NUM '{printf "%f",size_bytes/=1000}')
       let SCALE+=1
    done
 
-   if [ $SCALE == 0 ]; then
-      SIZE_UNIT="bytes"
-   elif [ $SCALE == 1 ]; then
-      SIZE_UNIT="KB"
-   elif [ $SCALE == 2 ]; then
-      SIZE_UNIT="MB"
-      NUM_DEC=1
-   elif [ $SCALE == 3 ]; then
-      SIZE_UNIT="GB"
-      NUM_DEC=2
-   elif [ $SCALE == 4 ]; then
-      SIZE_UNIT="TB"
-      NUM_DEC=2
+   # Print with precision that matches Finder's Size column
+   if [ $SCALE -eq 0 ]; then
+      printf "%d bytes\n" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 1 ]; then
+      printf "%d KB\n" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 2 ]; then
+      printf "%.1f MB\n" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 3 ]; then
+      printf "%.2f GB\n" $BIG_NUM $SIZE_UNIT
+   elif [ $SCALE -eq 4 ]; then
+      printf "%.2f TB\n" $BIG_NUM $SIZE_UNIT
    else
-      SIZE_UNIT="(out of scope!)"
+      echo "Number $1 is out of scope!"
    fi
-
-   printf "%0.*f $SIZE_UNIT\n" $NUM_DEC $BIG_NUM
 }
 
 # Ask Finder to tell us the logical size of the item. If it's large, it will be
