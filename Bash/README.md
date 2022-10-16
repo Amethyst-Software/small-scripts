@@ -155,17 +155,19 @@ Finds all hardlinked (multi-linked) files on a volume or in a specified director
 <!--The directory to get info on.-->
 Simulates the Get Info window on the command line by listing the size and item count of a directory. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/get_info.png)
 
+### [Name After Parent](name_after_parent.sh)
+<!--The directory with the files to rename.
+The suffix of the files to rename.
+(optional) 'seq' to change the body of the file name to a number.
+(optional) 'dry' to perform a dry run.-->
+Given a folder "X", renames each file inside "X-current name". If the argument "seq" is supplied, files will be renamed "X-#", where '#' is the alphabetical ordinal position of the file. [(sample result)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/name_after_parent.png)
+
 ### [Rename Emails with Dates](rename_emails_with_dates.sh)
 <!--The directory of emails.
 The directory to which to copy the emails.
 (optional) '--dry-run' will tell you what will be copied without actually copying anything.
 (optional) '--stop-on-fail' will stop the script if an email's date cannot be read.-->
 Given a folder of .emlx files, assigns each one a name based on the date and time it was sent/received. [(sample result)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/rename_emails_with_dates.png)
-
-### [Rename Sequentially](rename_sequentially.sh)
-<!--The directory with the files to rename.
-The suffix of the files to rename.-->
-Given a parent folder X, renames each file of a given suffix in X to be "X-#", where '#' is the alphabetical ordinal position of the file. [(sample result)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/rename_sequentially.png)
 
 ### [Run Script on Files by Size](run_script_on_files_by_size.sh)
 <!--The script that will be run.
