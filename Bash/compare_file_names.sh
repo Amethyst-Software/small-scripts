@@ -1,39 +1,62 @@
 #!/bin/bash
 
 # Compare File Names
-# Looks in the directories specified in parameters 1 and 2 and notes
-# which files are only in one place. Pass "--no-suffix" as the third
-# argument if you want to compare files without their suffixes (e.g.
-# "Something.jpg" in dir A matches with "Something.png" in dir B).
+# Looking at the two specified directories, notes which files are only in one place. Pass
+# "--no-suffix" as an additional argument if you want to compare files without their
+# suffixes (e.g. "Something.jpg" in dir A would match with "Something.png" in dir B).
 # Note that the directory comparison is not recursive.
+# Recommended width:
+# |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----|
 
 IFS="
 "
 
-COMPARE_DIR1=$1
-COMPARE_DIR2=$2
+COMPARE_DIR1=""
+COMPARE_DIR2=""
 IGNORE_SUFFIX=0
 UNIQUE_DIR1=0
 UNIQUE_DIR2=0
 
-# Check parameter input
+# If the supplied argument is a directory, place it in UNIQUE_DIR1 or UNIQUE_DIR2
+function checkIfDir()
+{
+   if [ -d "$1" ]; then
+      if [ -z "$COMPARE_DIR1" ]; then
+         COMPARE_DIR1="$1"
+      elif [ -z "$COMPARE_DIR2" ]; then
+         COMPARE_DIR2="$1"
+      fi
+   else
+      echo "Directory '$1' does not exist!"
+   fi
+}
+
+# Return "file" if the argument is 1, otherwise return "files"
+function pluralCheckFile()
+{
+   if [ $1 -ne 1 ]; then
+      echo "files"
+   else
+      echo "file"
+   fi
+}
+
+# Process arguments
 if [[ $# -ne 2 ]] && [[ $# -ne 3 ]]; then
    echo "You must pass in two directories to compare."
    exit
 fi
 
-if [ ! -d "$COMPARE_DIR1" ]; then
-   echo "The directory $COMPARE_DIR1 does not exist."
-   exit
-fi
+while (( "$#" )); do
+   case "$1" in
+      --no-suffix ) IGNORE_SUFFIX=1; shift;;
+      * )           checkIfDir $1; shift;;
+   esac
+done
 
-if [ ! -d "$COMPARE_DIR2" ]; then
-   echo "The directory $COMPARE_DIR2 does not exist."
+if [ -z "$COMPARE_DIR1" ] || [ -z "$COMPARE_DIR2" ]; then
+   echo "Did not receive two directories to compare."
    exit
-fi
-
-if [ "$3" == "--no-suffix" ]; then
-   IGNORE_SUFFIX=1
 fi
 
 # Compare directories
@@ -105,18 +128,9 @@ for THE_LINE2 in "${LISTING_DIR2[@]}"; do
 done
 
 # Summarize our findings
-STR_FILES1="files"
-if [ $UNIQUE_DIR1 -eq 1 ]; then
-   STR_FILES="file"
-fi
-STR_FILES2="files"
-if [ $UNIQUE_DIR2 -eq 1 ]; then
-   STR_FILES2="file"
-fi
-
 if [ $IGNORE_SUFFIX -eq 1 ]; then
    echo -n "While ignoring differences in suffixes, found "
 else
    echo -n "Found "
 fi
-echo "$UNIQUE_DIR1 $STR_FILES1 unique to directory A (out of $TOTAL_DIR1 files) and $UNIQUE_DIR2 $STR_FILES2 unique to directory B (out of $TOTAL_DIR2 files)."
+echo "$UNIQUE_DIR1 $(pluralCheckFile $UNIQUE_DIR1) unique to directory A (out of $TOTAL_DIR1 $(pluralCheckFile $TOTAL_DIR1)) and $UNIQUE_DIR2 $(pluralCheckFile $UNIQUE_DIR2) unique to directory B (out of $TOTAL_DIR2 $(pluralCheckFile $TOTAL_DIR2))."
