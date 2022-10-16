@@ -73,7 +73,7 @@ Compares two sets of files to make sure that all files in set 1 exist in set 2 a
 ### [Compare File Names](compare_file_names.sh)
 <!--The first directory to look at.
 The second directory to look at.
-(optional) The argument "--no-suffix" to ignore file name suffixes during comparison.-->
+(optional) The argument "--no-suffix" to ignore file name suffixes during comparison. Can come before or after the directory arguments.-->
 Compares the names of the files in two directories and outputs which names are unique to each side. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/compare_file_names.png)
 
 ### [Count Files by Name](count_files_by_name.sh)
@@ -214,8 +214,12 @@ Isolates and prints the comment block from the top of each source file in a proj
 
 ## Web
 ### [Create HTML Gallery](create_html_gallery.sh)
-<!--The top directory of the folders full of images.-->
-Creates an HTML directory listing of all subfolders, and an HTML gallery of all images in each subfolder. Requires ImageMagick. [(sample result)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/create_html_gallery.png)
+<!--'--dir' followed by the directory containing the folders full of images.
+(optional) '--cols' followed by the number of images to place on each row of the gallery table. '0' will create a table-less gallery where the images simply wrap to the width of your browser window.
+(optional) '--suff' followed by the suffix of the images to place in the gallery ('jpg' by default).
+(optional) '--style' followed by the word 'light', 'dark', or a path to a text file containing the contents you want the gallery's <style> tag to have.
+(add'l options; read top of script for details) '--name', '--width'.-->
+Creates an HTML listing of a directory's subfolders, and HTML galleries of the images in each subfolder. Requires ImageMagick when using the '--width' argument. [(sample result)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/create_html_gallery.png)
 
 ### [Download URLs in List](download_urls_in_list.sh)
 <!--The path to the file with the list of URLs.
