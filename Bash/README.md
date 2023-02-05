@@ -92,6 +92,10 @@ The text file with the list of names to use for the copies.
 The directory in which to make these copies.-->
 Given base file X and text file Y, makes one copy of X named for each line in Y in a given directory.
 
+### [Delete Empty Folders](delete_empty_folders.sh)
+<!--The directory in which to delete subfolders.-->
+Deletes subfolders that do not contain any items.
+
 ### [Delete Files in List](delete_files_in_list.sh)
 <!--The directory in which to recursively search files.
 The regex pattern of file names to search.
@@ -99,9 +103,10 @@ The text file with the terms to search for in these files.-->
 Searches a directory for files containing any of the terms in a given text file, and moves matching files to the Trash. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/delete_files_in_list.png)
 
 ### [Duplicate File and Copy Names](duplicate_file_and_copy_names.sh)
-<!--The path to the file to copy 'n' times.
-The directory of files with the names to use for the copies.
-The directory in which to make these copies.-->
+<!--'--copy-file': The path to the file to copy.
+'--copy-names': The directory of files with the names to use for the copies, OR the text file with one line for each copy's name.
+'--dest': The directory in which to make these copies.
+(optional) '--new-suffix': Use this suffix in place of the source file's suffix (no period).-->
 Given file X and set of files Y in a given directory, makes one copy of X named for each file in Y.
 
 ### [Find and Replace](find_and_replace.sh)
@@ -146,9 +151,9 @@ An 'osascript' wrapper that allows you to ask Finder from the command line what 
 Searching recursively in the supplied directory, checks each file for a resource fork, and totals the sizes of the data and resource forks separately. After printing the fork sizes to screen, the script also predicts what Finder will claim is the size of the folder, accounting for a bug as of macOS 10.14 pertaining to multi-fork files under APFS. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/get_fork_sizes.png)
 
 ### [Get Hardlink Sizes](get_hardlink_sizes.sh)
-<!--(After "--vol" or "--dir") The directory or volume to recursively search for multi-linked files.
-(optional) "--list-files" will list all found files instead of just giving the totals.
-(optional) "--bigger-than nUNITS" will only show files larger than 'n' "UNITS" of size.-->
+<!--(After '--vol' or '--dir') The directory or volume to recursively search for multi-linked files.
+(optional) '--list-files' will list all found files instead of just giving the totals.
+(optional) '--bigger-than nUNITS' will only show files larger than 'n' 'UNITS' of size.-->
 Finds all hardlinked (multi-linked) files on a volume or in a specified directory and prints out how much space the files take up and how much space is saved through the use of hardlinks. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/get_hardlink_sizes.png)
 
 ### [Get Info](get_info.sh)
@@ -168,6 +173,12 @@ The directory to which to copy the emails.
 (optional) '--dry-run' will tell you what will be copied without actually copying anything.
 (optional) '--stop-on-fail' will stop the script if an email's date cannot be read.-->
 Given a folder of .emlx files, assigns each one a name based on the date and time it was sent/received. [(sample result)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/rename_emails_with_dates.png)
+
+### [Rename Files from List](rename_files_from_list.sh)
+<!--'--dir': the directory with the contents to be renamed.
+'--names-from': the file with the items to search for and rename.
+'--names-to': the file with the new names for each item.-->
+Given a folder, a list of existing item names, and a list of new names, renames each item from the existing name to the new name.
 
 ### [Run Script on Files by Size](run_script_on_files_by_size.sh)
 <!--The script that will be run.
