@@ -6,7 +6,9 @@ Feel free to file an issue if a script is not working for you. Although I origin
 ## Contents
 [Unix/System](#unixsystem-management)
 
-[General Files](#general-file-management)
+[General Files A-D](#general-file-management-a-d)
+
+[General Files E-Z](#general-file-management-e-z)
 
 [Development](#development)
 
@@ -41,7 +43,7 @@ A convenient interactive assistant for updating MacPorts and all installed ports
 
 ---
 
-## General File Management
+## General File Management A-D
 ### [Change File Suffixes](change_file_suffixes.sh)
 <!--The directory to search.
 The file suffix or suffix regex pattern to look for.
@@ -76,6 +78,12 @@ The second directory to look at.
 (optional) The argument "--no-suffix" to ignore file name suffixes during comparison. Can come before or after the directory arguments.-->
 Compares the names of the files in two directories and outputs which names are unique to each side. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/compare_file_names.png)
 
+### [Convert with FFmpeg](convert_with_ffmpeg.sh)
+<!--The directory to look in.
+The suffix of the files to convert.
+The suffix to which they should be converted.-->
+Searches a directory for a given file suffix and tells ffmpeg to convert all the results to the type indicated by a second given suffix.
+
 ### [Count Files by Name](count_files_by_name.sh)
 <!--The directory in which to recursively search.
 The suffixes to search for.-->
@@ -108,6 +116,10 @@ Searches a directory for files containing any of the terms in a given text file,
 '--dest': The directory in which to make these copies.
 (optional) '--new-suffix': Use this suffix in place of the source file's suffix (no period).-->
 Given file X and set of files Y in a given directory, makes one copy of X named for each file in Y.
+
+---
+
+## General File Management E-Z
 
 ### [Find and Replace](find_and_replace.sh)
 <!--The file in which to search for terms.
