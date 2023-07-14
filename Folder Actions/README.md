@@ -1,0 +1,2 @@
+# Small Scripts/Folder Actions
+These AppleScript scripts are intended for attaching to a folder as a Folder Action. Currently the only script here is "Convert to JPEG", which will convert images in certain formats to JPEG when they are dropped in the target folder (the original file is not changed but saved as a new format).

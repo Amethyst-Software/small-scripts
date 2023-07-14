@@ -1,2 +1,2 @@
 # Small Scripts
-Various utility scripts that I've written for the Mac's Bash shell. Those which have been turned into Automator workflows are in the Automator directory. Larger Bash scripts have their own individual repositories.
+Various utility scripts that I've written over the years. Smaller scripts written for the Mac's version of the Bash shell are in the Bash directory. Larger Bash scripts have their own individual repositories under this GitHub account. Scripts found in Automator/ are in AppleScript/Bash, and scripts in Folder Actions/ are in AppleScript.
