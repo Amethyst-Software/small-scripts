@@ -68,7 +68,7 @@ Compares the names of the items in a directory to the file names listed in a tex
 ### [Compare File Dates](compare_file_dates.sh)
 <!--'--dirpath1' and '--dirpath2' are used for directory comparison.
 '--listpath1' and '--listpath2' are used for file comparison.
-'--dirfilter' can be used to only look at files in the directories which match a naming pattern.
+'--dirfilter' can be used to look only at files in dirpath1 that have specific suffixes.
 The directories and/or files you pass in can be named using '--dirname1', '--dirname2', '--listname1' and '--listname2'.-->
 Compares two sets of files to make sure that all files in set 1 exist in set 2 and that no files differ in modification date. The compared sets can be either two directories or two plain-text files which list individual files. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/compare_file_dates.png)
 
