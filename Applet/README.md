@@ -1,0 +1,2 @@
+# Small Scripts/Applet
+These AppleScript scripts are intended for saving as an application (File > Export… in Script Editor). Currently the only script here is "Convert to MP4", which will convert a movie from any format understood by ffmpeg to H.264 MP4 when it is dropped on the application (the original file is not changed; a new copy is saved).
