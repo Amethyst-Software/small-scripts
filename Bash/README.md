@@ -205,10 +205,10 @@ Looking at the files in a given directory, pass each one to the specified script
 (optional) '--echo' will print the assembled command before running it.-->
 Run a script with the arguments listed in a text file. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/run_script_with_args_from_file.png)
 
-### [Total Sound Times](total_sound_times.sh)
-<!--The directory of sound files to examine.
+### [Total Media Time](total_media_time.sh)
+<!--The directory of video/sound files to examine.
 The suffix of the files which should be totalled.-->
-Gives the cumulative total time of all AIFFs in a folder. Requires 'ffmpeg' to be installed. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/total_sound_times.png)
+Gives the cumulative playing time of all files with the specified suffix in a folder. Requires 'ffmpeg' to be installed. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/total_media_time.png)
 
 ### [ZipSafe](zip_safe.sh)
 <!--The directory to compress (ZIP is placed next to directory).-->
