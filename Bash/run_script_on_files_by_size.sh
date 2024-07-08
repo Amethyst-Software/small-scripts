@@ -10,14 +10,23 @@
 # Recommended width:
 # |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----|
 
+IFS="
+"
+
+if [ $# -lt 4 ]; then
+   echo "You need to supply the following parameters:"
+   echo "1. The script to run."
+   echo "2. The directory in which to look for files."
+   echo "3. The smallest file size to select."
+   echo "4. The largest file size to select."
+   exit
+fi
+
 # Get all files below specified size in given directory, then place them in a sortable
 # array
 declare -a FILE_DATA=()
-IFS="
-"
 for LINE in `find "$2" -type f ! -name ".DS_Store" -depth 1 -ls`; do
    IFS=" "
-   #echo "Line is $LINE"
    declare -a LINE_PARTS=($LINE)
    SIZE=${LINE_PARTS[6]}
    NAME=${LINE##*/}
