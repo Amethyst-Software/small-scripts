@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Total Sound Times
-# Sums the times of the audio files in a given folder (parameter 1) which have the suffix given in parameter 2.
+# Total Media Times
+# Sums the times of the media files in a given folder (parameter 1) which have the suffix given in parameter 2.
 # The suffix you supply is not case-sensitive. Requires ffmpeg.
 # Recommended width:
 # |---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---|
@@ -16,7 +16,7 @@ TOTAL_TIME=0
 COUNT=0
 
 if [ "$#" -ne 2 ]; then
-   echo "Error: You must supply two parameters: the directory in which to look and the suffix of audio file to look at (without the leading period)."
+   echo "Error: You must supply two parameters: the directory in which to look and the suffix of audio or video file to look at (without the leading period)."
    exit
 fi
 
@@ -31,6 +31,11 @@ if [ "$?" -ne 0 ]; then
    exit
 fi
 
+# Round 1st param to number of decimal places given in 2nd param
+round()
+{
+    printf '%.*f' "$2" $(echo "a=$1; if(a>0) a+=5/10^($2+1) else if (a<0) a-=5/10^($2+1); scale=$2+1; a/1" | bc)
+}
 
 echo "Totaling the time of this folder's ${SUFFIX_UPPER}s..."
 for SOUND in `find $IN_DIR -iname "*.$2"`; do
@@ -46,4 +51,19 @@ for SOUND in `find $IN_DIR -iname "*.$2"`; do
    let COUNT+=1
 done
 
-echo "The total time of these $COUNT audio files is $TOTAL_TIME seconds."
+echo -n "The total time of these $COUNT media files is $TOTAL_TIME seconds"
+TOTAL_TIME_INT=$(echo $TOTAL_TIME | awk '{printf "%d",int($1)}')
+if [ $TOTAL_TIME_INT -gt 60 ]; then # also give time in minutes
+   MINUTES=$(echo | awk -v seconds=$TOTAL_TIME '{printf "%f",seconds/=60}')
+   echo -n ", or $(round $MINUTES 1) minutes"
+   
+   MINUTES_INT=$(echo $MINUTES | awk '{printf "%d",int($1)}')
+   if [ $MINUTES_INT -gt 60 ]; then # also give time in hours
+      HOURS=$(echo | awk -v minutes=$MINUTES '{printf "%f",minutes/=60}')
+      echo ", or $(round $HOURS 1) hours."
+   else
+      echo "."
+   fi
+else
+   echo "."
+fi
