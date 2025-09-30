@@ -18,15 +18,18 @@ NEW_SUFFIX="$3"
 RENAMED=0
 FILES="files"
 
-cd "$TARGET_DIR"
-
-for FN in `find .`; do
-   if [[ $FN == $TARGET_SUFFIX ]]; then
-      FN_BASE=${FN%.*}
-      echo "Renaming $FN to '$FN_BASE$NEW_SUFFIX'..."
-      mv $FN $FN_BASE$NEW_SUFFIX
-      let RENAMED+=1
+for FILE in `find -s "$TARGET_DIR" -type f -iname "*.$TARGET_SUFFIX"`; do
+   FILE_NAME=$(echo "$FILE" | sed 's/.*\///') # clip file name from whole path
+   
+   # If this is not a file with a name and suffix, skip it
+   if [[ ! "$FILE_NAME" =~ [[:print:]]+\.[[:print:]]+$ ]]; then
+      continue
    fi
+   
+   NEW_FILE="${FILE%.$TARGET_SUFFIX}.$NEW_SUFFIX"
+      echo "Renaming $FILE to '$NEW_FILE'..."
+      mv $FILE $NEW_FILE
+      let RENAMED+=1
 done
 
 if [ $RENAMED -eq 1 ]; then
