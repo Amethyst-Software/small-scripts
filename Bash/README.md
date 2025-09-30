@@ -57,7 +57,8 @@ The directory in which to save the text file full of addresses.
 Saves all email addresses found in a folder's text files or Apple Mail emails (.emlx).
 
 ### [Collect File Suffixes](collect_file_suffixes.sh)
-<!--The directory to recursively collect suffixes from.-->
+<!--The directory to recursively collect suffixes from.
+(optional) Add '--count-sort' to sort the results by count of suffix, not alphabetized suffix.-->
 Prints out a list of all suffixes used by the files in a directory. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/collect_file_suffixes.png)
 
 ### [Compare Directory to List](compare_directory_to_list.sh)
@@ -104,7 +105,7 @@ Given base file X and text file Y, makes one copy of X named for each line in Y 
 <!--The directory in which to delete subfolders.-->
 Deletes subfolders that do not contain any items.
 
-### [Delete Files in List](delete_files_in_list.sh)
+### [Delete Files by Content in List](delete_files_by_content_in_list.sh)
 <!--The directory in which to recursively search files.
 The regex pattern of file names to search.
 The text file with the terms to search for in these files.-->
