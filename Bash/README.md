@@ -90,16 +90,17 @@ Searches a directory for a given file suffix and tells ffmpeg to convert all the
 The suffixes to search for.-->
 Recursively searches for and counts the specified files in the given directory. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/count_files_by_name.png)
 
-### [Count Lines by Name](count_lines_by_name.sh)
-<!--The directory in which to recursively search.
-The suffixes to search for.-->
-Recursively searches for specified files in the given directory and totals their line counts. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/count_lines_by_name.png)
-
 ### [Create Files from List](create_files_from_list.sh)
 <!--The path to the file to copy 'n' times.
 The text file with the list of names to use for the copies.
 The directory in which to make these copies.-->
 Given base file X and text file Y, makes one copy of X named for each line in Y in a given directory.
+
+### [Delete Alternating Files](delete_alternating_files.sh)
+<!--'--dir:DIR': The directory in which to delete files.
+(optional) '--every-nth:N': Delete every Nth file. (default 2)
+(optional) '--start-from:N': Start deleting files from this point. (default 2)-->
+By default, this script moves to the Trash every other file in a directory, e.g. the 2nd, 4th, 6th, etc., but the frequency and starting point can be adjusted with arguments.
 
 ### [Delete Empty Folders](delete_empty_folders.sh)
 <!--The directory in which to delete subfolders.-->
@@ -210,6 +211,11 @@ Run a script with the arguments listed in a text file. [(sample usage)](https://
 <!--The directory of video/sound files to examine.
 The suffix of the files which should be totalled.-->
 Gives the cumulative playing time of all files with the specified suffix in a folder. Requires 'ffmpeg' to be installed. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/total_media_time.png)
+
+### [Total Text Size](total_text_size.sh)
+<!--The directory in which to recursively search.
+The suffixes to search for.-->
+Recursively searches for specified files in the given directory and totals their line, word and character counts. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/total_text_size.png)
 
 ### [ZipSafe](zip_safe.sh)
 <!--The directory to compress (ZIP is placed next to directory).-->
