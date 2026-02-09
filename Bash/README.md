@@ -79,6 +79,11 @@ The second directory to look at.
 (optional) The argument "--no-suffix" to ignore file name suffixes during comparison. Can come before or after the directory arguments.-->
 Compares the names of the files in two directories and outputs which names are unique to each side. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/compare_file_names.png)
 
+### [Compare List to List](compare_list_to_list.sh)
+<!--The first file to look at.
+The second file to look at.-->
+Compares the contents of two text files, checking if every line in file 1 can be found in file 2.
+
 ### [Convert with FFmpeg](convert_with_ffmpeg.sh)
 <!--The directory to look in.
 The suffix of the files to convert.
