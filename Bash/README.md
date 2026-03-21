@@ -84,12 +84,6 @@ Compares the names of the files in two directories and outputs which names are u
 The second file to look at.-->
 Compares the contents of two text files, checking if every line in file 1 can be found in file 2.
 
-### [Convert with FFmpeg](convert_with_ffmpeg.sh)
-<!--The directory to look in.
-The suffix of the files to convert.
-The suffix to which they should be converted.-->
-Searches a directory for a given file suffix and tells ffmpeg to convert all the results to the type indicated by a second given suffix.
-
 ### [Count Files by Name](count_files_by_name.sh)
 <!--The directory in which to recursively search.
 The suffixes to search for.-->
@@ -260,6 +254,10 @@ Creates an HTML listing of a directory's subfolders, and HTML galleries of the i
 <!--The path to the file with the list of URLs.
 The folder into which to download the files.-->
 Given a text file that has a list of URLs pointing to files, newline-separated, download the linked files into a given directory. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/download_urls_in_list.png)
+
+### [Download With yt-dlp](download_with_yt-dlp.sh)
+<!--The URL for the video to download from YouTube.-->
+Queries YouTube for the ideal downloadable version of the video at the supplied URL and downloads it.
 
 ### [HTTP Tests](http_tests.sh)
 <!--The type of response to obtain (run without parameters to see arguments).
