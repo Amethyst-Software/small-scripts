@@ -173,6 +173,10 @@ Finds all hardlinked (multi-linked) files on a volume or in a specified director
 <!--The directory to get info on.-->
 Simulates the Get Info window on the command line by listing the size and item count of a directory. [(sample usage)](https://github.com/Amethyst-Software/small-scripts/blob/main/Bash/samples/get_info.png)
 
+### [Mark Download Safe](mark_download_safe.sh)
+<!--The file or directory to act on.-->
+De-quarantines a file or all the files in a directory (recursively) which have been downloaded from the Internet. Additionally, shell scripts in the directory are marked as executable.
+
 ### [Name After Parent](name_after_parent.sh)
 <!--The directory with the files to rename.
 The suffix of the files to rename.
